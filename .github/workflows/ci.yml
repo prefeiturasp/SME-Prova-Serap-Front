@@ -28,9 +28,7 @@ jobs:
                docker push ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
         
   deploy:
-    runs-on: dotnet    
-    environment:
-      name: development
+    runs-on: dotnet        
     needs: [ build ]
     steps:
       - name: Run an adjust of kubernetes dev
