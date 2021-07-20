@@ -20,11 +20,13 @@ jobs:
           registry: ${{ secrets.REGISTRY_HOST }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PWD }}
-
     
       - name: Build the Docker image    
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          
         run: |  
-               docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front --build-arg API_URL=${{ secrets.API_URL }}
+               docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
                docker push ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
         
   deploy:
