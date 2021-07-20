@@ -32,6 +32,8 @@ jobs:
   deploy:
     runs-on: dotnet        
     needs: [ build ]
+    environment:
+      name: development
     steps:
       - name: Run an adjust of kubernetes dev
         env: # Ou como uma variável de ambiente
