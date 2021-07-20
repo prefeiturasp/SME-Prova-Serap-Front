@@ -24,5 +24,5 @@ jobs:
     
       - name: Build the Docker image    
         run: |  
-               docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
+               docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front -e API_URL=${{ secrets.API_URL }}
                docker push ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
