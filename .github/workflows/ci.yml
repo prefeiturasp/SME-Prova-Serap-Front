@@ -21,19 +21,18 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PWD }}
     
-      - name: Build the Docker image    
-        env:
-          API_URL: ${{ secrets.API_URL }}
-          
+      - name: Build the Docker image            
         run: |  
                docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
                docker push ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
+               echo ${{ secrets.API_URL }}
         
-  deploy:
-    runs-on: dotnet        
-    needs: [ build ]
+  deploy-development:
+    runs-on: dotnet
+    if: ${{ github.ref == 'refs/heads/development' }}        
     environment:
       name: development
+    needs: [ build ]
     steps:
       - name: Run an adjust of kubernetes dev
         env: # Ou como uma variável de ambiente
@@ -46,3 +45,22 @@ jobs:
        run: |
          kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante           
          rm -f /runner/.kube/config      
+  
+  deploy-release:
+    runs-on: dotnet
+    if: ${{ github.ref == 'refs/heads/release' }}        
+    environment:
+      name: release
+    needs: [ build ]
+    steps:
+      - name: Run an adjust of kubernetes dev
+        env: # Ou como uma variável de ambiente
+          RANCHER_URL: ${{ secrets.RANCHER_URL }}
+          RANCHER_TOKEN: ${{ secrets.RANCHER_TOKEN }}
+        run: |
+          sed -e "s/\${RANCHER_URL}/$RANCHER_URL/" -e "s/\${RANCHER_TOKEN}/$RANCHER_TOKEN/" /runner/config_template > /runner/.kube/config                
+      - 
+       name: Change Images
+       run: |
+         kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante           
+         rm -f /runner/.kube/config  
