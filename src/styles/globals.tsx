@@ -1,11 +1,13 @@
 import { createGlobalStyle } from 'styled-components';
-import './roboto.css';
 
 export default createGlobalStyle`
  
   *,
   html,
   body {
-    font-family: 'Roboto', sans-serif; 
+    font-family: 'Poppins', sans-serif;      
+    input {
+    -webkit-background-clip: text !important;
+    } 
   }
 `;
