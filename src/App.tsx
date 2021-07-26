@@ -1,12 +1,18 @@
-import Button from '@material-ui/core/Button';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Login from './pages/login/login.page';
 import GlobalStyle from './styles/globals';
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <GlobalStyle />
-      <Button variant="contained">Default</Button>
-    </>
+      <Switch>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/home">home</Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
