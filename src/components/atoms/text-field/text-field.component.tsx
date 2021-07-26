@@ -8,7 +8,7 @@ import {
   withStyles,
 } from '@material-ui/core/styles';
 import React from 'react';
-import { Colors } from '../colors/colors';
+import { Colors } from '../colors/colors.enum';
 
 const styles: (theme: Theme) => StyleRules<string> = (theme) =>
   createStyles({
