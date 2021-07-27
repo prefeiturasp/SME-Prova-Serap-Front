@@ -17,11 +17,8 @@ const styles: (theme: Theme) => StyleRules<string> = (theme) =>
         backgroundColor: Colors.Inputbackground,
         borderRadius: '12px',
       },
-      '& label.Mui-focused': {
-        color: Colors.Primary,
-      },
+      '& label.Mui-focused': {},
       '& .MuiFilledInput-underline:after': {
-        borderBottomColor: Colors.Primary,
         width: '92%',
         left: '4%',
       },
