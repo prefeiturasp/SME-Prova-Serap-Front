@@ -5,7 +5,7 @@ import FormLogin from '../../organisms/form-login/form-login.component';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(3.2),
   },
 }));
 
