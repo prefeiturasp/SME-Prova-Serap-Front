@@ -1,3 +1,4 @@
+import React from 'react';
 import { createTheme, Grid, MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import GlobalStyle from './components/atoms/styles/globals';
