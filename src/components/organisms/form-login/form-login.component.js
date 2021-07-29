@@ -3,6 +3,9 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import React, { useState } from 'react';
 import Button from '~/components/atoms/button/button.component';
 import TextField from '~/components/atoms/text-field/text-field.component';
+import { store } from '~/redux';
+import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
+import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
 
 const FormLogin = () => {
   const [valoresForm, setValoresForm] = useState({
@@ -20,7 +23,7 @@ const FormLogin = () => {
 
   const someteNumero = (valor) => String(valor).replace(/\D/g, '');
 
-  const validate = (fieldValues) => {
+  const validarCamposObrigatorios = (fieldValues) => {
     const temp = { ...erros };
 
     if ('codigoEOL' in fieldValues) {
@@ -37,22 +40,62 @@ const FormLogin = () => {
     setErros({
       ...temp,
     });
+
+    if (temp.codigoEOL || temp.senha) {
+      return true;
+    }
+
+    return false;
   };
 
-  const handleChange = (nomeCapo, event) => {
-    const novoValor = someteNumero(event?.target?.value);
+  const handleChange = (nomeCapo, valor) => {
+    const novoValor = someteNumero(valor);
     const novosValores = { ...valoresForm, [nomeCapo]: novoValor };
     setValoresForm(novosValores);
-    validate(novosValores);
   };
 
   const handleClickExibirSenha = () => {
     setValoresForm({ ...valoresForm, exibirSenha: !valoresForm?.exibirSenha });
   };
 
-  const logar = (e) => {
+  const logar = async (e) => {
     e.preventDefault();
-    validate(valoresForm);
+    const temCamposInvalidos = validarCamposObrigatorios(valoresForm);
+
+    const params = {
+      login: valoresForm?.codigoEOL,
+      senha: valoresForm?.senha,
+    };
+
+    if (!temCamposInvalidos) {
+      const resposta = await autenticacaoService
+        .autenticar(params)
+        .catch((err) => {
+          const msgErro = err?.response?.data?.mensagens?.[0];
+
+          if (err?.response?.status === 411) {
+            setErros({
+              codigoEOL: msgErro,
+              senha: montarTextoObrigatorio('senha'),
+            });
+          } else if (err?.response?.status === 412) {
+            setErros({ codigoEOL: '', senha: msgErro });
+          }
+
+          handleChange('senha', '');
+        });
+
+      if (resposta?.data) {
+        const { token } = resposta.data;
+
+        store.dispatch(
+          salvarDadosLogin({
+            token,
+            codigoEOL: valoresForm?.codigoEOL,
+          }),
+        );
+      }
+    }
   };
 
   return (
@@ -65,7 +108,7 @@ const FormLogin = () => {
               name="codigoEOL"
               label="Digite o código EOL"
               value={valoresForm?.codigoEOL}
-              onChange={(e) => handleChange('codigoEOL', e)}
+              onChange={(e) => handleChange('codigoEOL', e?.target?.value)}
               autoFocus
               required
               maxLength={10}
@@ -82,7 +125,7 @@ const FormLogin = () => {
               label="Digite a senha"
               type={valoresForm?.exibirSenha ? 'text' : 'password'}
               value={valoresForm?.senha}
-              onChange={(e) => handleChange('senha', e)}
+              onChange={(e) => handleChange('senha', e?.target?.value)}
               required
               maxLength={4}
               inputMode="numeric"
