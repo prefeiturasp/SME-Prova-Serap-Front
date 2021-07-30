@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import GlobalStyle from './components/atoms/styles/globals';
+import Footer from './components/organisms/footer/footer.component';
 import Login from './components/pages/login/login.page';
 import { persistor, store } from './redux';
 import history from './services/history';
@@ -44,6 +45,7 @@ function App() {
                   )}
                 </Switch>
               </Grid>
+              <Footer />
             </Grid>
           </MuiThemeProvider>
         </Router>
