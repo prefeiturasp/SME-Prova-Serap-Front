@@ -6,7 +6,7 @@ const reducers = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === '@sessao/limpar') state = undefined;
+  if (action.type === '@sessao/limparSessao') state = undefined;
 
   return reducers(state, action);
 };

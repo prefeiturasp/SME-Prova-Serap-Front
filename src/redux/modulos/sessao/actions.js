@@ -1,5 +1,5 @@
-export function LimparSessao() {
+export function limparSessao() {
   return {
-    type: '@sessao/limpar',
+    type: '@sessao/limparSessao',
   };
 }

@@ -5,7 +5,9 @@ import Button from '~/components/atoms/button/button.component';
 import TextField from '~/components/atoms/text-field/text-field.component';
 import { store } from '~/redux';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
+import { URL_HOME } from '~/route/url.constans';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
+import history from '~/services/history';
 
 const FormLogin = () => {
   const [valoresForm, setValoresForm] = useState({
@@ -94,6 +96,8 @@ const FormLogin = () => {
             codigoEOL: valoresForm?.codigoEOL,
           }),
         );
+
+        history.push(URL_HOME);
       }
     }
   };

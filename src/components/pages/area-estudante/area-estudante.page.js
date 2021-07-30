@@ -1,5 +1,6 @@
+import { Container } from '@material-ui/core';
 import React from 'react';
 
-export const AreaEstudante = () => <div>Estudante</div>;
+const AreaEstudante = () => <Container>Área do estudante</Container>;
 
 export default AreaEstudante;
