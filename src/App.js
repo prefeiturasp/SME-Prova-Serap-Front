@@ -1,0 +1,37 @@
+import { createTheme, MuiThemeProvider } from '@material-ui/core';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import GlobalStyle from './components/atoms/styles/globals';
+import { persistor, store } from './redux';
+import Rotas from './route/rotas';
+import history from './services/history';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#FF7755',
+    },
+    error: {
+      main: '#F92F57',
+    },
+  },
+});
+
+function App() {
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Router history={history}>
+            <GlobalStyle />
+            <Rotas />
+          </Router>
+        </PersistGate>
+      </Provider>
+    </MuiThemeProvider>
+  );
+}
+
+export default App;
