@@ -7,6 +7,7 @@ const inicial = {
   dataLogin: null,
   logado: false,
   nome: '',
+  dataHoraExpiracao: '',
 };
 
 export default function usuario(state = inicial, action) {
@@ -15,6 +16,7 @@ export default function usuario(state = inicial, action) {
       case '@usuario/salvarDadosLogin':
         draft.codigoEOL = action?.payload?.codigoEOL.trim();
         draft.token = action?.payload?.token;
+        draft.dataHoraExpiracao = action?.payload?.dataHoraExpiracao;
         draft.dataLogin = new Date();
         draft.logado = true;
         break;
@@ -27,6 +29,12 @@ export default function usuario(state = inicial, action) {
       case '@usuario/deslogar':
         localStorage.clear();
         draft = inicial;
+        break;
+      case '@usuario/salvarLoginRevalidado':
+        draft.token = action?.payload?.token;
+        draft.dataLogin = new Date();
+        draft.dataHoraExpiracao = action?.payload?.dataHoraExpiracao;
+        draft.logado = true;
         break;
       default:
         break;

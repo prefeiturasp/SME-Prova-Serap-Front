@@ -21,11 +21,13 @@ const FormLogin = () => {
     senha: '',
   });
 
+  const QTD_MIN_SENHA = 3;
+
   const montarTextoObrigatorio = (campo) => `O campo “${campo}” é obrigatório`;
 
   const someteNumero = (valor) => String(valor).replace(/\D/g, '');
 
-  const validarCamposObrigatorios = (fieldValues) => {
+  const validarCampos = (fieldValues) => {
     const temp = { ...erros };
 
     if ('codigoEOL' in fieldValues) {
@@ -35,8 +37,12 @@ const FormLogin = () => {
           : montarTextoObrigatorio('codigoEOL');
     }
     if ('senha' in fieldValues) {
-      temp.senha =
-        fieldValues?.senha?.length !== 0 ? '' : montarTextoObrigatorio('senha');
+      temp.senha = '';
+      if (fieldValues?.senha?.length === 0) {
+        temp.senha = montarTextoObrigatorio('senha');
+      } else if (fieldValues?.senha?.length < QTD_MIN_SENHA) {
+        temp.senha = `A senha deve conter no mínimo ${QTD_MIN_SENHA} caracteres.`;
+      }
     }
 
     setErros({
@@ -62,7 +68,7 @@ const FormLogin = () => {
 
   const logar = async (e) => {
     e.preventDefault();
-    const temCamposInvalidos = validarCamposObrigatorios(valoresForm);
+    const temCamposInvalidos = validarCampos(valoresForm);
 
     const params = {
       login: valoresForm?.codigoEOL,
@@ -88,11 +94,9 @@ const FormLogin = () => {
         });
 
       if (resposta?.data) {
-        const { token } = resposta.data;
-
         store.dispatch(
           salvarDadosLogin({
-            token,
+            ...resposta.data,
             codigoEOL: valoresForm?.codigoEOL,
           }),
         );
