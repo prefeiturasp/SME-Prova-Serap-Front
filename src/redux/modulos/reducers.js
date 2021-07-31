@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
+import sistema from './sistema/reducers';
 import usuario from './usuario/reducers';
 
 const reducers = combineReducers({
   usuario,
+  sistema,
 });
 
 const rootReducer = (state, action) => {

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import LabelFooter from '~/components/molecules/label-footer/label-footer.component';
+import { setVersaoAtualFront } from '~/redux/modulos/sistema/actions';
+import { versaoService } from '~/services/versao/versao.service';
 
 export const Container = styled.div`
   margin-top: auto;
@@ -10,10 +13,27 @@ export const Container = styled.div`
   margin-bottom: 16px;
 `;
 
-const Footer = () => (
-  <Container>
-    <LabelFooter />
-  </Container>
-);
+const Footer = () => {
+  const dispatch = useDispatch();
+
+  const obterVersao = useCallback(async () => {
+    const resposta = await versaoService.obterVersaoAtualFront();
+    if (resposta?.data) {
+      dispatch(setVersaoAtualFront(resposta.data));
+    } else {
+      dispatch(setVersaoAtualFront());
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    obterVersao();
+  }, [obterVersao]);
+
+  return (
+    <Container>
+      <LabelFooter />
+    </Container>
+  );
+};
 
 export default Footer;

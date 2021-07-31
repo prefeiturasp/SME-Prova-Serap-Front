@@ -2,7 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { store } from '~/redux';
 import { salvarLoginRevalidado } from '~/redux/modulos/usuario/actions';
-import { deslogarPorSessaoInvalida } from './autenticacao/autenticacao-deslogar';
+import { deslogarDoSistema } from './autenticacao/autenticacao-deslogar';
 import { urlBase } from './variaveis';
 
 let url = '';
@@ -30,7 +30,7 @@ const revalidarAutenticacao = async (token) => {
       }),
     );
   } else {
-    deslogarPorSessaoInvalida();
+    deslogarDoSistema();
   }
 
   return resposta?.data;
@@ -96,7 +96,7 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      deslogarPorSessaoInvalida();
+      deslogarDoSistema();
     }
     return Promise.reject(error);
   },
