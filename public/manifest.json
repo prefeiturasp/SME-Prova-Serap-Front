@@ -1,21 +1,26 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SERAp",
+  "name": "SERAp Estudantes",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "images/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "images/brasao_sp_144.png",
+      "sizes": "144x144",
+      "type": "image/png"
     },
     {
-      "src": "logo512.png",
+      "src": "images/brasao_sp_144_maskable.png",
+      "sizes": "144x144",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/brasao_sp.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256 512x512"
     }
   ],
   "start_url": ".",
