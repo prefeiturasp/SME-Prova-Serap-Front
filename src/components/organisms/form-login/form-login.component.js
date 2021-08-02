@@ -37,12 +37,12 @@ const FormLogin = () => {
       temp.codigoEOL =
         fieldValues?.codigoEOL?.length !== 0
           ? ''
-          : montarTextoObrigatorio('codigoEOL');
+          : montarTextoObrigatorio('Código EOL');
     }
     if ('senha' in fieldValues) {
       temp.senha = '';
       if (fieldValues?.senha?.length === 0) {
-        temp.senha = montarTextoObrigatorio('senha');
+        temp.senha = montarTextoObrigatorio('Senha');
       } else if (fieldValues?.senha?.length < QTD_MIN_SENHA) {
         temp.senha = `A senha deve conter no mínimo ${QTD_MIN_SENHA} caracteres.`;
       }
@@ -89,7 +89,7 @@ const FormLogin = () => {
           if (err?.response?.status === 411) {
             setErros({
               codigoEOL: msgErro,
-              senha: montarTextoObrigatorio('senha'),
+              senha: '',
             });
           } else if (err?.response?.status === 412) {
             setErros({ codigoEOL: '', senha: msgErro });

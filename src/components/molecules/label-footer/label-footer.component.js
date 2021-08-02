@@ -16,9 +16,8 @@ const LabelFooter = () => {
       alignItems="center"
     >
       <StyleLabelFooter>
-        Sistema homologado para os navegadores Google Chrome e Firefox.
+        {`Sistema homologado para os navegadores Google Chrome e Firefox. ${versaoAtual}`}
       </StyleLabelFooter>
-      <StyleLabelFooter>{versaoAtual || ''}</StyleLabelFooter>
     </Grid>
   );
 };
