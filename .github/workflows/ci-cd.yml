@@ -47,7 +47,7 @@ jobs:
          rm -f /runner/.kube/config      
   
   deploy-release:
-    runs-on: dotnet
+    runs-on: serap
     if: ${{ github.ref == 'refs/heads/release' }}        
     environment:
       name: release
