@@ -28,7 +28,7 @@ jobs:
                echo ${{ secrets.API_URL }}
         
   deploy-development:
-    runs-on: dotnet
+    runs-on: serap
     if: ${{ github.ref == 'refs/heads/development' }}        
     environment:
       name: development
