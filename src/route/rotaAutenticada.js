@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import HomeTemplate from '~/components/templates/home/home.template';
-import { URL_LOGIN } from './url.constans';
+import { URL_LOGIN } from './url.constants';
 
 const RotaAutenticada = (props) => {
   const { path } = props;

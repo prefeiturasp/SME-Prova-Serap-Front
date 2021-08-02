@@ -1,15 +1,18 @@
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '~/components/atoms/button/button.component';
 import TextField from '~/components/atoms/text-field/text-field.component';
-import { store } from '~/redux';
+import { setExibirLoaderGeral } from '~/redux/modulos/loader/actions';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
-import { URL_HOME } from '~/route/url.constans';
+import { URL_HOME } from '~/route/url.constants';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
 import history from '~/services/history';
 
 const FormLogin = () => {
+  const dispatch = useDispatch();
+
   const [valoresForm, setValoresForm] = useState({
     codigoEOL: '',
     senha: '',
@@ -21,22 +24,28 @@ const FormLogin = () => {
     senha: '',
   });
 
+  const QTD_MIN_SENHA = 3;
+
   const montarTextoObrigatorio = (campo) => `O campo “${campo}” é obrigatório`;
 
   const someteNumero = (valor) => String(valor).replace(/\D/g, '');
 
-  const validarCamposObrigatorios = (fieldValues) => {
+  const validarCampos = (fieldValues) => {
     const temp = { ...erros };
 
     if ('codigoEOL' in fieldValues) {
       temp.codigoEOL =
         fieldValues?.codigoEOL?.length !== 0
           ? ''
-          : montarTextoObrigatorio('codigoEOL');
+          : montarTextoObrigatorio('Código EOL');
     }
     if ('senha' in fieldValues) {
-      temp.senha =
-        fieldValues?.senha?.length !== 0 ? '' : montarTextoObrigatorio('senha');
+      temp.senha = '';
+      if (fieldValues?.senha?.length === 0) {
+        temp.senha = montarTextoObrigatorio('Senha');
+      } else if (fieldValues?.senha?.length < QTD_MIN_SENHA) {
+        temp.senha = `A senha deve conter no mínimo ${QTD_MIN_SENHA} caracteres.`;
+      }
     }
 
     setErros({
@@ -62,7 +71,7 @@ const FormLogin = () => {
 
   const logar = async (e) => {
     e.preventDefault();
-    const temCamposInvalidos = validarCamposObrigatorios(valoresForm);
+    const temCamposInvalidos = validarCampos(valoresForm);
 
     const params = {
       login: valoresForm?.codigoEOL,
@@ -70,6 +79,8 @@ const FormLogin = () => {
     };
 
     if (!temCamposInvalidos) {
+      dispatch(setExibirLoaderGeral(true));
+
       const resposta = await autenticacaoService
         .autenticar(params)
         .catch((err) => {
@@ -78,21 +89,20 @@ const FormLogin = () => {
           if (err?.response?.status === 411) {
             setErros({
               codigoEOL: msgErro,
-              senha: montarTextoObrigatorio('senha'),
+              senha: '',
             });
           } else if (err?.response?.status === 412) {
             setErros({ codigoEOL: '', senha: msgErro });
           }
 
           handleChange('senha', '');
-        });
+        })
+        .finally(() => dispatch(setExibirLoaderGeral(false)));
 
       if (resposta?.data) {
-        const { token } = resposta.data;
-
-        store.dispatch(
+        dispatch(
           salvarDadosLogin({
-            token,
+            ...resposta.data,
             codigoEOL: valoresForm?.codigoEOL,
           }),
         );

@@ -12,10 +12,12 @@ const HomeTemplate = () => {
   const dispatch = useDispatch();
 
   const obterMeusDados = useCallback(async () => {
-    const retornaDados = await autenticacaoService.obterMeusDados();
+    const resposta = await autenticacaoService.obterMeusDados();
 
-    if (retornaDados?.data) {
-      dispatch(setDadosUsuario(retornaDados.data));
+    if (resposta?.data) {
+      dispatch(setDadosUsuario(resposta.data));
+    } else {
+      dispatch(setDadosUsuario({}));
     }
   }, [dispatch]);
 

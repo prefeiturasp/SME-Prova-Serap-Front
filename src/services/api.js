@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { urlBase } from './variaveis';
+import moment from 'moment';
 import { store } from '~/redux';
+import { salvarLoginRevalidado } from '~/redux/modulos/usuario/actions';
+import { deslogarDoSistema } from './autenticacao/autenticacao-deslogar';
+import { urlBase } from './variaveis';
 
 let url = '';
-
-const cancelToken = axios.CancelToken.source();
 
 urlBase().then((resposta) => {
   url = resposta?.data;
@@ -14,32 +15,88 @@ const api = axios.create({
   baseURL: url,
 });
 
+const SEGUNDOS_ANTES_EXPIRAR = -30;
+const URL_REVALIDAR = 'v1/autenticacao/revalidar';
+
+const revalidarAutenticacao = async (token) => {
+  const resposta = await api
+    .post('v1/autenticacao/revalidar', { token })
+    .catch((e) => console.log(e));
+
+  if (resposta?.data?.token) {
+    store.dispatch(
+      salvarLoginRevalidado({
+        ...resposta.data,
+      }),
+    );
+  } else {
+    deslogarDoSistema();
+  }
+
+  return resposta?.data;
+};
+
+const configPadraoAutenticacao = async (config, token, dataHoraExpiracao) => {
+  const diff = moment().diff(dataHoraExpiracao, 'seconds');
+
+  if (!url) {
+    url = await urlBase();
+  }
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (
+    config?.url !== URL_REVALIDAR &&
+    token &&
+    dataHoraExpiracao &&
+    diff >= SEGUNDOS_ANTES_EXPIRAR
+  ) {
+    const dadosRevalidacao = await revalidarAutenticacao(token);
+    if (dadosRevalidacao?.token) {
+      config.headers.Authorization = `Bearer ${dadosRevalidacao.token}`;
+    }
+  }
+
+  config.baseURL = url;
+
+  return config;
+};
+
+const configRevalidarAutenticacao = async (config, token) => {
+  if (!url) {
+    url = await urlBase();
+  }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  config.baseURL = url;
+  return config;
+};
+
 api.interceptors.request.use(
   async (config) => {
-    const { token } = store.getState().usuario;
+    const { token, dataHoraExpiracao } = store.getState().usuario;
 
-    if (!url) url = await urlBase();
+    if (config?.url !== URL_REVALIDAR) {
+      return configPadraoAutenticacao(config, token, dataHoraExpiracao);
+    }
 
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-
-    config.cancelToken = cancelToken.token;
-
-    config.baseURL = url;
-
-    return config;
+    return configRevalidarAutenticacao(config, token);
   },
-  (error) => {
-    console.log(error);
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isCancel(error)) return Promise.reject(error);
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401) {
-      console.log(error);
+      deslogarDoSistema();
     }
     return Promise.reject(error);
   },

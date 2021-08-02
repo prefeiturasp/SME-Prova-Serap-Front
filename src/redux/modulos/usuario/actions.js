@@ -24,3 +24,10 @@ export function deslogar() {
     type: '@usuario/deslogar',
   };
 }
+
+export function salvarLoginRevalidado(login) {
+  return {
+    type: '@usuario/salvarLoginRevalidado',
+    payload: login,
+  };
+}
