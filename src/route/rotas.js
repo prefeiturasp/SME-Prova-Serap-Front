@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import RotaAutenticada from './rotaAutenticada';
 import RotaNaoAutenticada from './rotaNaoAutenticada';
-import { URL_HOME, URL_LOGIN } from './url.constans';
+import { URL_HOME, URL_LOGIN } from './url.constants';
 
 const Rotas = () => (
   <Switch>

@@ -1,15 +1,18 @@
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '~/components/atoms/button/button.component';
 import TextField from '~/components/atoms/text-field/text-field.component';
-import { store } from '~/redux';
+import { setExibirLoaderGeral } from '~/redux/modulos/loader/actions';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
-import { URL_HOME } from '~/route/url.constans';
+import { URL_HOME } from '~/route/url.constants';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
 import history from '~/services/history';
 
 const FormLogin = () => {
+  const dispatch = useDispatch();
+
   const [valoresForm, setValoresForm] = useState({
     codigoEOL: '',
     senha: '',
@@ -76,6 +79,8 @@ const FormLogin = () => {
     };
 
     if (!temCamposInvalidos) {
+      dispatch(setExibirLoaderGeral(true));
+
       const resposta = await autenticacaoService
         .autenticar(params)
         .catch((err) => {
@@ -91,10 +96,11 @@ const FormLogin = () => {
           }
 
           handleChange('senha', '');
-        });
+        })
+        .finally(() => dispatch(setExibirLoaderGeral(false)));
 
       if (resposta?.data) {
-        store.dispatch(
+        dispatch(
           salvarDadosLogin({
             ...resposta.data,
             codigoEOL: valoresForm?.codigoEOL,
