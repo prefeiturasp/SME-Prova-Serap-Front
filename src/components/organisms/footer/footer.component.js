@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import LabelFooter from '~/components/molecules/label-footer/label-footer.component';
 import { setVersaoAtualFront } from '~/redux/modulos/sistema/actions';
+import { erros } from '~/services/snackbar/snackbar';
 import { versaoService } from '~/services/versao/versao.service';
 
 export const Container = styled.div`
@@ -17,7 +18,9 @@ const Footer = () => {
   const dispatch = useDispatch();
 
   const obterVersao = useCallback(async () => {
-    const resposta = await versaoService.obterVersaoAtualFront();
+    const resposta = await versaoService
+      .obterVersaoAtualFront()
+      .catch((e) => erros(e));
     if (resposta?.data) {
       dispatch(setVersaoAtualFront(resposta.data));
     } else {

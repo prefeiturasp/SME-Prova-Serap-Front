@@ -3,6 +3,7 @@ import moment from 'moment';
 import { store } from '~/redux';
 import { salvarLoginRevalidado } from '~/redux/modulos/usuario/actions';
 import { deslogarDoSistema } from './autenticacao/autenticacao-deslogar';
+import { erros } from './snackbar/snackbar';
 import { urlBase } from './variaveis';
 
 let url = '';
@@ -21,7 +22,7 @@ const URL_REVALIDAR = 'v1/autenticacao/revalidar';
 const revalidarAutenticacao = async (token) => {
   const resposta = await api
     .post('v1/autenticacao/revalidar', { token })
-    .catch((e) => console.log(e));
+    .catch((e) => erros(e));
 
   if (resposta?.data?.token) {
     store.dispatch(

@@ -7,12 +7,15 @@ import NavBar from '~/components/organisms/nav/nav-bar.component';
 import AreaEstudante from '~/components/pages/area-estudante/area-estudante.page';
 import { setDadosUsuario } from '~/redux/modulos/usuario/actions';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
+import { erros } from '~/services/snackbar/snackbar';
 
 const HomeTemplate = () => {
   const dispatch = useDispatch();
 
   const obterMeusDados = useCallback(async () => {
-    const resposta = await autenticacaoService.obterMeusDados();
+    const resposta = await autenticacaoService
+      .obterMeusDados()
+      .catch((e) => erros(e));
 
     if (resposta?.data) {
       dispatch(setDadosUsuario(resposta.data));
