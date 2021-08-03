@@ -16,25 +16,37 @@ const api = axios.create({
   baseURL: url,
 });
 
-const SEGUNDOS_ANTES_EXPIRAR = -30;
+const SEGUNDOS_ANTES_EXPIRAR = 0;
 const URL_REVALIDAR = 'v1/autenticacao/revalidar';
 
-const revalidarAutenticacao = async (token) => {
-  const resposta = await api
-    .post('v1/autenticacao/revalidar', { token })
-    .catch((e) => erros(e));
+let refreshTokenPromise;
 
-  if (resposta?.data?.token) {
-    store.dispatch(
-      salvarLoginRevalidado({
-        ...resposta.data,
-      }),
-    );
-  } else {
-    deslogarDoSistema();
+const getRefreshToken = (token) =>
+  api.post(URL_REVALIDAR, { token }).then((resp) => resp);
+
+const revalidarAutenticacao = async (tokenAntigo) => {
+  if (!refreshTokenPromise) {
+    refreshTokenPromise = getRefreshToken(tokenAntigo)
+      .then((resposta) => {
+        refreshTokenPromise = null;
+        return resposta?.data;
+      })
+      .catch((e) => erros(e));
   }
 
-  return resposta?.data;
+  return refreshTokenPromise.then((dadosRefresh) => {
+    if (dadosRefresh?.token) {
+      store.dispatch(
+        salvarLoginRevalidado({
+          ...dadosRefresh,
+        }),
+      );
+    } else {
+      deslogarDoSistema();
+    }
+
+    return dadosRefresh;
+  });
 };
 
 const configPadraoAutenticacao = async (config, token, dataHoraExpiracao) => {
