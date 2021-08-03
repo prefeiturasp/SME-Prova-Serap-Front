@@ -2,24 +2,44 @@ import axios from 'axios';
 import { store } from '~/redux';
 import { setSentryDNS, setUrlBase } from '~/redux/modulos/sistema/actions';
 
-const urlBase = () => {
-  const { dispatch } = store;
+const URL = '/../../../configuracoes/variaveis.json';
+
+let primiseObterVariaveis;
+
+const obterVariaveis = () => axios.get(URL).then((resp) => resp);
+
+const configVariaveis = async () => {
   const state = store.getState();
 
-  const { sistema, usuario } = state;
+  const { usuario } = state;
 
-  if (!sistema?.urlBase) {
-    return axios
-      .get('/../../../configuracoes/variaveis.json')
-      .then((response) => {
-        dispatch(setUrlBase(response?.data?.API_URL));
-        return response?.data?.API_URL;
+  if (!primiseObterVariaveis) {
+    primiseObterVariaveis = obterVariaveis()
+      .then((resposta) => {
+        primiseObterVariaveis = null;
+        return resposta?.data;
       })
       .catch(() => {
         if (usuario?.logado) {
           window.location.href = '/erro';
         }
       });
+  }
+
+  return primiseObterVariaveis.then((dados) => dados);
+};
+
+const urlBase = () => {
+  const { dispatch } = store;
+  const state = store.getState();
+
+  const { sistema } = state;
+
+  if (!sistema?.urlBase) {
+    return configVariaveis().then((response) => {
+      dispatch(setUrlBase(response?.API_URL));
+      return response?.API_URL;
+    });
   }
 
   return sistema?.urlBase;
@@ -29,20 +49,13 @@ const obterSentryDNS = () => {
   const { dispatch } = store;
   const state = store.getState();
 
-  const { sistema, usuario } = state;
+  const { sistema } = state;
 
   if (!sistema?.sentrDns) {
-    return axios
-      .get('/../../../configuracoes/variaveis.json')
-      .then((response) => {
-        dispatch(setSentryDNS(response?.data?.SENTRY_DSN));
-        return response?.data?.SENTRY_DSN;
-      })
-      .catch(() => {
-        if (usuario?.logado) {
-          window.location.href = '/erro';
-        }
-      });
+    return configVariaveis().then((response) => {
+      dispatch(setSentryDNS(response?.SENTRY_DSN));
+      return response?.SENTRY_DSN;
+    });
   }
 
   return sistema?.sentrDns;
