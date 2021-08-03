@@ -69,6 +69,8 @@ const configPadraoAutenticacao = async (config, token, dataHoraExpiracao) => {
     const dadosRevalidacao = await revalidarAutenticacao(token);
     if (dadosRevalidacao?.token) {
       config.headers.Authorization = `Bearer ${dadosRevalidacao.token}`;
+    } else {
+      return Promise.reject();
     }
   }
 

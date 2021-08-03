@@ -60,7 +60,7 @@ const info = (mensagem) => {
 const erros = (listaErros) => {
   if (listaErros?.response?.data?.mensagens) {
     listaErros.response.data.mensagens.forEach((mensagem) => erro(mensagem));
-  } else erro('Ocorreu um erro interno.');
+  }
 };
 
 export { sucesso, erro, erros, aviso, info };

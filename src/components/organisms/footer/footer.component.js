@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import LabelFooter from '~/components/molecules/label-footer/label-footer.component';
+import LabelFooter from '~/components/atoms/label-footer/label-footer.component';
 import { setVersaoAtualFront } from '~/redux/modulos/sistema/actions';
 import { erros } from '~/services/snackbar/snackbar';
 import { versaoService } from '~/services/versao/versao.service';

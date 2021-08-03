@@ -1,11 +1,17 @@
+import React from 'react';
+import AreaEstudante from '~/components/pages/area-estudante/area-estudante.page';
 import PaginaComErro from '~/components/pages/erro/erro.page';
-import HomeTemplate from '~/components/templates/home/home.template';
+import PaginaTemplate from '~/components/templates/pagina/pagina.template';
 import { URL_ERRO, URL_HOME } from './url.constants';
 
 const rotasComponentes = [
   {
     path: URL_HOME,
-    component: HomeTemplate,
+    component: () => (
+      <PaginaTemplate>
+        <AreaEstudante />
+      </PaginaTemplate>
+    ),
     exact: true,
   },
   {
