@@ -1,6 +1,7 @@
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { Switch } from 'react-router-dom';
+import SentryConfigurator from '~/services/sentry/sentry-config';
 import { SnackbarUtilsConfigurator } from '~/services/snackbar/snackbar';
 import RotaAutenticada from './rota-autenticada';
 import RotaNaoAutenticada from './rota-nao-autenticada';
@@ -19,6 +20,7 @@ const Rotas = () => (
       <RotaAutenticada />
     </Switch>
     <SnackbarUtilsConfigurator />
+    <SentryConfigurator />
   </SnackbarProvider>
 );
 
