@@ -1,14 +1,27 @@
+import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import RotaAutenticada from './rotaAutenticada';
-import RotaNaoAutenticada from './rotaNaoAutenticada';
-import { URL_HOME, URL_LOGIN } from './url.constants';
+import SentryConfigurator from '~/services/sentry/sentry-config';
+import { SnackbarUtilsConfigurator } from '~/services/snackbar/snackbar';
+import RotaAutenticada from './rota-autenticada';
+import RotaNaoAutenticada from './rota-nao-autenticada';
+import { URL_LOGIN } from './url.constants';
 
 const Rotas = () => (
-  <Switch>
-    <RotaNaoAutenticada path={URL_LOGIN} />
-    <RotaAutenticada path={URL_HOME} />
-  </Switch>
+  <SnackbarProvider
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    style={{ flexWrap: 'unset' }}
+  >
+    <Switch>
+      <RotaNaoAutenticada path={URL_LOGIN} />
+      <RotaAutenticada />
+    </Switch>
+    <SnackbarUtilsConfigurator />
+    <SentryConfigurator />
+  </SnackbarProvider>
 );
 
 export default Rotas;
