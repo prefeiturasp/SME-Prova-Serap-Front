@@ -5,12 +5,13 @@ import { obterSentryDSN } from '../variaveis';
 
 const SentryConfigurator = () => {
   const obterDsn = useCallback(async () => {
-    const dsn = await obterSentryDSN();
+    const sentryConfig = await obterSentryDSN();
 
     Sentry.init({
-      dsn: dsn || '',
+      dsn: sentryConfig?.sentryDSN || '',
       integrations: [new Integrations.BrowserTracing()],
       tracesSampleRate: 1.0,
+      environment: sentryConfig?.sentryEnvironment,
     });
   }, []);
 

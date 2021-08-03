@@ -4,6 +4,7 @@ const inicial = {
   versao: '',
   urlBase: '',
   sentryDSN: '',
+  sentryEnvironment: '',
 };
 
 export default function sistema(state = inicial, action) {
@@ -15,8 +16,9 @@ export default function sistema(state = inicial, action) {
       case '@sistema/setUrlBase':
         draft.urlBase = action.payload;
         break;
-      case '@sistema/setSentryDSN':
-        draft.sentryDSN = action.payload;
+      case '@sistema/setSentryConfigDSN':
+        draft.sentryDSN = action.payload?.SENTRY_DSN;
+        draft.sentryEnvironment = action.payload?.SENTRY_ENVIRONMENT;
         break;
       default:
         break;
