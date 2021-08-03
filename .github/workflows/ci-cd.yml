@@ -1,9 +1,9 @@
 name: Docker Image CI
- 
+
 on:
   push:
     branches: [ development, release ]
-  
+
 
 jobs:
 
@@ -20,16 +20,21 @@ jobs:
           registry: ${{ secrets.REGISTRY_HOST }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PWD }}
-    
-      - name: Build the Docker image            
-        run: |  
+
+      - name: Build the Docker image
+        run: |
+               sonar-scanner \
+               -Dsonar.projectKey=SME-prova-serap-front \
+               -Dsonar.sources=. \
+               -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
+               -Dsonar.login= $ {{ secrets.SONAR_KEY }}
                docker build . --tag ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
                docker push ${{ secrets.REGISTRY_HOST }}/${GITHUB_REF##*/}/sme-prova-serap-front
                echo ${{ secrets.API_URL }}
-        
+
   deploy-development:
     runs-on: serap
-    if: ${{ github.ref == 'refs/heads/development' }}        
+    if: ${{ github.ref == 'refs/heads/development' }}
     environment:
       name: development
     needs: [ build ]
@@ -39,16 +44,16 @@ jobs:
           RANCHER_URL: ${{ secrets.RANCHER_URL }}
           RANCHER_TOKEN: ${{ secrets.RANCHER_TOKEN }}
         run: |
-          sed -e "s/\${RANCHER_URL}/$RANCHER_URL/" -e "s/\${RANCHER_TOKEN}/$RANCHER_TOKEN/" /runner/config_template > /runner/.kube/config                
-      - 
+          sed -e "s/\${RANCHER_URL}/$RANCHER_URL/" -e "s/\${RANCHER_TOKEN}/$RANCHER_TOKEN/" /runner/config_template > /runner/.kube/config
+      -
        name: Change Images
        run: |
-         kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante           
-         rm -f /runner/.kube/config      
-  
+         kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante
+         rm -f /runner/.kube/config
+
   deploy-release:
     runs-on: serap
-    if: ${{ github.ref == 'refs/heads/release' }}        
+    if: ${{ github.ref == 'refs/heads/release' }}
     environment:
       name: release
     needs: [ build ]
@@ -58,9 +63,9 @@ jobs:
           RANCHER_URL: ${{ secrets.RANCHER_URL }}
           RANCHER_TOKEN: ${{ secrets.RANCHER_TOKEN }}
         run: |
-          sed -e "s/\${RANCHER_URL}/$RANCHER_URL/" -e "s/\${RANCHER_TOKEN}/$RANCHER_TOKEN/" /runner/config_template > /runner/.kube/config                
-      - 
+          sed -e "s/\${RANCHER_URL}/$RANCHER_URL/" -e "s/\${RANCHER_TOKEN}/$RANCHER_TOKEN/" /runner/config_template > /runner/.kube/config
+      -
        name: Change Images
        run: |
-         kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante           
-         rm -f /runner/.kube/config  
+         kubectl rollout restart deployment/sme-prova-serap-front -n sme-serap-estudante
+         rm -f /runner/.kube/config
