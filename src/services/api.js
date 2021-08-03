@@ -3,6 +3,7 @@ import moment from 'moment';
 import { store } from '~/redux';
 import { salvarLoginRevalidado } from '~/redux/modulos/usuario/actions';
 import { deslogarDoSistema } from './autenticacao/autenticacao-deslogar';
+import { erros } from './snackbar/snackbar';
 import { urlBase } from './variaveis';
 
 let url = '';
@@ -15,25 +16,37 @@ const api = axios.create({
   baseURL: url,
 });
 
-const SEGUNDOS_ANTES_EXPIRAR = -30;
+const SEGUNDOS_ANTES_EXPIRAR = 0;
 const URL_REVALIDAR = 'v1/autenticacao/revalidar';
 
-const revalidarAutenticacao = async (token) => {
-  const resposta = await api
-    .post('v1/autenticacao/revalidar', { token })
-    .catch((e) => console.log(e));
+let refreshTokenPromise;
 
-  if (resposta?.data?.token) {
-    store.dispatch(
-      salvarLoginRevalidado({
-        ...resposta.data,
-      }),
-    );
-  } else {
-    deslogarDoSistema();
+const getRefreshToken = (token) =>
+  api.post(URL_REVALIDAR, { token }).then((resp) => resp);
+
+const revalidarAutenticacao = async (tokenAntigo) => {
+  if (!refreshTokenPromise) {
+    refreshTokenPromise = getRefreshToken(tokenAntigo)
+      .then((resposta) => {
+        refreshTokenPromise = null;
+        return resposta?.data;
+      })
+      .catch((e) => erros(e));
   }
 
-  return resposta?.data;
+  return refreshTokenPromise.then((dadosRefresh) => {
+    if (dadosRefresh?.token) {
+      store.dispatch(
+        salvarLoginRevalidado({
+          ...dadosRefresh,
+        }),
+      );
+    } else {
+      deslogarDoSistema();
+    }
+
+    return dadosRefresh;
+  });
 };
 
 const configPadraoAutenticacao = async (config, token, dataHoraExpiracao) => {
@@ -56,6 +69,8 @@ const configPadraoAutenticacao = async (config, token, dataHoraExpiracao) => {
     const dadosRevalidacao = await revalidarAutenticacao(token);
     if (dadosRevalidacao?.token) {
       config.headers.Authorization = `Bearer ${dadosRevalidacao.token}`;
+    } else {
+      return Promise.reject();
     }
   }
 

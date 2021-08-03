@@ -9,6 +9,7 @@ import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
 import { URL_HOME } from '~/route/url.constants';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
 import history from '~/services/history';
+import { erros } from '~/services/snackbar/snackbar';
 
 const FormLogin = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const FormLogin = () => {
     exibirSenha: false,
   });
 
-  const [erros, setErros] = useState({
+  const [errosCampos, setErrosCampos] = useState({
     codigoEOL: '',
     senha: '',
   });
@@ -31,7 +32,7 @@ const FormLogin = () => {
   const someteNumero = (valor) => String(valor).replace(/\D/g, '');
 
   const validarCampos = (fieldValues) => {
-    const temp = { ...erros };
+    const temp = { ...errosCampos };
 
     if ('codigoEOL' in fieldValues) {
       temp.codigoEOL =
@@ -48,7 +49,7 @@ const FormLogin = () => {
       }
     }
 
-    setErros({
+    setErrosCampos({
       ...temp,
     });
 
@@ -87,12 +88,14 @@ const FormLogin = () => {
           const msgErro = err?.response?.data?.mensagens?.[0];
 
           if (err?.response?.status === 411) {
-            setErros({
+            setErrosCampos({
               codigoEOL: msgErro,
               senha: '',
             });
           } else if (err?.response?.status === 412) {
-            setErros({ codigoEOL: '', senha: msgErro });
+            setErrosCampos({ codigoEOL: '', senha: msgErro });
+          } else {
+            erros(err);
           }
 
           handleChange('senha', '');
@@ -128,8 +131,8 @@ const FormLogin = () => {
               maxLength={10}
               inputMode="numeric"
               startAdornment={<div style={{ marginTop: '16px' }}>RA-</div>}
-              error={!!erros.codigoEOL}
-              helperText={erros.codigoEOL}
+              error={!!errosCampos.codigoEOL}
+              helperText={errosCampos.codigoEOL}
             />
           </Grid>
           <Grid item xs={12}>
@@ -143,8 +146,8 @@ const FormLogin = () => {
               required
               maxLength={4}
               inputMode="numeric"
-              error={!!erros.senha}
-              helperText={erros?.senha}
+              error={!!errosCampos.senha}
+              helperText={errosCampos?.senha}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

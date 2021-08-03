@@ -1,7 +1,12 @@
 import { Grid } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import StyleLabelFooter from '~/components/atoms/style-label-footer/style-label-footer.component';
+import styled from 'styled-components';
+
+export const Container = styled.div`
+  color: rgb(102, 102, 102);
+  font-size: 12px;
+`;
 
 const LabelFooter = () => {
   const versaoAtual = useSelector((state) => state.sistema?.versao);
@@ -15,9 +20,9 @@ const LabelFooter = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <StyleLabelFooter>
+      <Container>
         {`Sistema homologado para os navegadores Google Chrome e Firefox. ${versaoAtual}`}
-      </StyleLabelFooter>
+      </Container>
     </Grid>
   );
 };
