@@ -26,7 +26,7 @@ jobs:
                -Dsonar.projectKey=SME-prova-serap-front \
                -Dsonar.sources=. \
                -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
-               -Dsonar.login= ${{ secrets.SONAR_KEY }}
+               -Dsonar.login=${{ secrets.SONAR_KEY }}
 
       - name: Build the Docker image
         run: |
