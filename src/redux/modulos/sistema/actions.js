@@ -8,7 +8,7 @@ export const setUrlBase = (url) => ({
   payload: url,
 });
 
-export const setSentryDSN = (dsn) => ({
-  type: '@sistema/setSentryDSN',
-  payload: dsn,
+export const setSentryConfigDSN = (config) => ({
+  type: '@sistema/setSentryConfigDSN',
+  payload: config,
 });

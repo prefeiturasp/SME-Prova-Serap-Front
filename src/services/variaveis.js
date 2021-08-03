@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { store } from '~/redux';
-import { setSentryDSN, setUrlBase } from '~/redux/modulos/sistema/actions';
+import {
+  setSentryConfigDSN,
+  setUrlBase,
+} from '~/redux/modulos/sistema/actions';
 
 const URL = '/../../../configuracoes/variaveis.json';
 
@@ -53,12 +56,15 @@ const obterSentryDSN = () => {
 
   if (!sistema?.sentrDsn) {
     return configVariaveis().then((response) => {
-      dispatch(setSentryDSN(response?.SENTRY_DSN));
-      return response?.SENTRY_DSN;
+      dispatch(setSentryConfigDSN(response));
+      return {
+        sentryDSN: response?.SENTRY_DSN,
+        sentryEnvironment: response?.SENTRY_ENVIRONMENT,
+      };
     });
   }
 
-  return sistema?.sentrDsn;
+  return sistema;
 };
 
 export { urlBase, obterSentryDSN };
