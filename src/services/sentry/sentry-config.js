@@ -1,22 +1,22 @@
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { useCallback, useEffect } from 'react';
-import { obterSentryDNS } from '../variaveis';
+import { obterSentryDSN } from '../variaveis';
 
 const SentryConfigurator = () => {
-  const obterDns = useCallback(async () => {
-    const dns = await obterSentryDNS();
+  const obterDsn = useCallback(async () => {
+    const dsn = await obterSentryDSN();
 
     Sentry.init({
-      dsn: dns || '',
+      dsn: dsn || '',
       integrations: [new Integrations.BrowserTracing()],
       tracesSampleRate: 1.0,
     });
   }, []);
 
   useEffect(() => {
-    obterDns();
-  }, [obterDns]);
+    obterDsn();
+  }, [obterDsn]);
 
   return null;
 };

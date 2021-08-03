@@ -3,7 +3,7 @@ import produce from 'immer';
 const inicial = {
   versao: '',
   urlBase: '',
-  sentryDNS: '',
+  sentryDSN: '',
 };
 
 export default function sistema(state = inicial, action) {
@@ -15,8 +15,8 @@ export default function sistema(state = inicial, action) {
       case '@sistema/setUrlBase':
         draft.urlBase = action.payload;
         break;
-      case '@sistema/setSentryDNS':
-        draft.sentryDNS = action.payload;
+      case '@sistema/setSentryDSN':
+        draft.sentryDSN = action.payload;
         break;
       default:
         break;
