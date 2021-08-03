@@ -4,7 +4,7 @@ import { setSentryDNS, setUrlBase } from '~/redux/modulos/sistema/actions';
 
 const URL = '/../../../configuracoes/variaveis.json';
 
-let primiseObterVariaveis;
+let promiseObterVariaveis;
 
 const obterVariaveis = () => axios.get(URL).then((resp) => resp);
 
@@ -13,10 +13,10 @@ const configVariaveis = async () => {
 
   const { usuario } = state;
 
-  if (!primiseObterVariaveis) {
-    primiseObterVariaveis = obterVariaveis()
+  if (!promiseObterVariaveis) {
+    promiseObterVariaveis = obterVariaveis()
       .then((resposta) => {
-        primiseObterVariaveis = null;
+        promiseObterVariaveis = null;
         return resposta?.data;
       })
       .catch(() => {
@@ -26,7 +26,7 @@ const configVariaveis = async () => {
       });
   }
 
-  return primiseObterVariaveis.then((dados) => dados);
+  return promiseObterVariaveis.then((dados) => dados);
 };
 
 const urlBase = () => {
