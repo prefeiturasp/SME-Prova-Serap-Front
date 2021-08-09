@@ -1,6 +1,6 @@
 import React from 'react';
 import AreaEstudante from '~/components/pages/area-estudante/area-estudante.page';
-import PaginaComErro from '~/components/pages/erro/erro.page';
+import PaginaComErro from '~/components/pages/pagina-com-erro/pagina-com-erro.page';
 import PaginaTemplate from '~/components/templates/pagina/pagina.template';
 import { URL_ERRO, URL_HOME } from './url.constants';
 

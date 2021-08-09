@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
-import loader from './loader/reducers';
+import loaderReducers from './loader/loader.reducers';
 import sistema from './sistema/reducers';
 import usuario from './usuario/reducers';
+import provas from './provas/reducers';
 
 const reducers = combineReducers({
   usuario,
   sistema,
-  loader,
+  loaderReducers,
+  provas,
 });
 
 const rootReducer = (state, action) => {

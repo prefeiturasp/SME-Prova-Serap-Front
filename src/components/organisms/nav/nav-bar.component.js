@@ -5,7 +5,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ButtonSair from '~/components/atoms/button-sair/button.component';
+import ButtonSair from '~/components/atoms/button-sair/button-sair.component';
 import colors from '~/components/atoms/styles/colors';
 import { deslogarDoSistema } from '~/services/autenticacao/autenticacao-deslogar';
 

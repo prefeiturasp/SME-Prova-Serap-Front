@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '~/components/atoms/button/button.component';
 import TextField from '~/components/atoms/text-field/text-field.component';
-import { setExibirLoaderGeral } from '~/redux/modulos/loader/actions';
+import { setExibirLoaderGeral } from '~/redux/modulos/loader/loader.actions';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
 import { URL_HOME } from '~/route/url.constants';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
