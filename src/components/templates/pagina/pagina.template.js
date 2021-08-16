@@ -6,7 +6,7 @@ import Footer from '~/components/organisms/footer/footer.component';
 import NavBar from '~/components/organisms/nav/nav-bar.component';
 import { autenticacaoService } from '~/services/autenticacao/autenticacao.service';
 
-const PaginaTemplate = ({ children }) => {
+const PaginaTemplate = ({ children, exibirNomeProva }) => {
   useEffect(() => {
     autenticacaoService.obterMeusDados();
   }, []);
@@ -17,8 +17,8 @@ const PaginaTemplate = ({ children }) => {
       justifyContent="center"
       style={{ minHeight: '100vh', backgroundColor: colors.backgroundGeral }}
     >
-      <Grid item xl={6}>
-        <NavBar />
+      <Grid item xl={6} style={{ display: 'grid', justifyContent: 'center' }}>
+        <NavBar exibirNomeProva={exibirNomeProva} />
         {children}
       </Grid>
       <Footer />
@@ -28,10 +28,12 @@ const PaginaTemplate = ({ children }) => {
 
 PaginaTemplate.propTypes = {
   children: PropTypes.node,
+  exibirNomeProva: PropTypes.string,
 };
 
 PaginaTemplate.defaultProps = {
   children: null,
+  exibirNomeProva: '',
 };
 
 export default PaginaTemplate;

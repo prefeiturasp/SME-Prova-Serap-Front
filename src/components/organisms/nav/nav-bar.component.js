@@ -32,9 +32,12 @@ const ToolbarStyled = styled(Toolbar)({
   minHeight: '56px',
 });
 
-export default function NavBar() {
+export default function NavBar({ exibirNomeProva }) {
   const nomeUsuario = useSelector((state) => state.usuario?.nome);
   const codigoEOL = useSelector((state) => state.usuario?.codigoEOL);
+  const nomeProva = useSelector(
+    (state) => state.provas?.dadosProvaIniciada?.nomeProva,
+  );
 
   const onClickSair = () => deslogarDoSistema();
 
@@ -43,8 +46,31 @@ export default function NavBar() {
       <NavBarScroll>
         <AppBar>
           <ToolbarStyled>
-            <div style={{ flexGrow: 1, fontWeight: 700, fontSize: 16 }}>
-              {`${nomeUsuario} (${codigoEOL})`}
+            <div
+              style={{
+                flexGrow: 1,
+                fontWeight: 700,
+                fontSize: 16,
+              }}
+            >
+              <div
+                style={{
+                  marginBottom: exibirNomeProva ? -4 : 0,
+                }}
+              >{`${nomeUsuario} (${codigoEOL})`}</div>
+              {exibirNomeProva && nomeProva ? (
+                <div
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 400,
+                    marginBottom: -15,
+                  }}
+                >
+                  {nomeProva}
+                </div>
+              ) : (
+                ''
+              )}
             </div>
             <ButtonSair onClick={onClickSair} />
           </ToolbarStyled>
@@ -54,3 +80,7 @@ export default function NavBar() {
     </>
   );
 }
+
+NavBar.propTypes = {
+  exibirNomeProva: PropTypes.string.isRequired,
+};

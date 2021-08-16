@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import loaderReducers from './loader/loader.reducers';
+import loader from './loader/loader.reducers';
 import sistema from './sistema/reducers';
 import usuario from './usuario/reducers';
 import provas from './provas/reducers';
@@ -7,7 +7,7 @@ import provas from './provas/reducers';
 const reducers = combineReducers({
   usuario,
   sistema,
-  loaderReducers,
+  loader,
   provas,
 });
 
