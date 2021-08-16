@@ -67,7 +67,7 @@ const TabsAtom = ({ dados, tabInicial }) => {
 };
 
 TabsAtom.propTypes = {
-  dados: PropTypes.oneOfType(PropTypes.array),
+  dados: PropTypes.oneOfType([PropTypes.array]),
   tabInicial: PropTypes.string,
 };
 

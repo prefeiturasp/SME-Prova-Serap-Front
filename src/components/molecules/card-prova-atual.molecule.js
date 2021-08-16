@@ -88,7 +88,15 @@ const CardProvaAtual = (props) => {
           </span>
         </div>
         <div className={classes.botaoAcao}>
-          <Button onClick={onClickInicialProva} endIcon={<ArrowForward />}>
+          <Button
+            onClick={() => {
+              const prova = {
+                nomeProva: descricao,
+              };
+              onClickInicialProva(prova);
+            }}
+            endIcon={<ArrowForward />}
+          >
             Iniciar a prova
           </Button>
         </div>
@@ -99,14 +107,14 @@ const CardProvaAtual = (props) => {
 
 CardProvaAtual.propTypes = {
   descricao: PropTypes.string,
-  itensQuantidade: PropTypes.string,
+  itensQuantidade: PropTypes.number,
   dataInicio: PropTypes.string,
   onClickInicialProva: PropTypes.func,
 };
 
 CardProvaAtual.defaultProps = {
   descricao: '',
-  itensQuantidade: '',
+  itensQuantidade: null,
   dataInicio: '',
   onClickInicialProva: () => {},
 };
