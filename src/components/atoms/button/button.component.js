@@ -16,9 +16,14 @@ const ButtonStyled = styled(MuiButton)({
 });
 
 const Button = (props) => {
-  const { fullWidth, variant, onClick, children } = props;
+  const { fullWidth, variant, onClick, children, endIcon } = props;
   return (
-    <ButtonStyled fullWidth={fullWidth} variant={variant} onClick={onClick}>
+    <ButtonStyled
+      fullWidth={fullWidth}
+      variant={variant}
+      onClick={onClick}
+      endIcon={endIcon}
+    >
       {children}
     </ButtonStyled>
   );
@@ -29,6 +34,7 @@ Button.propTypes = {
   fullWidth: PropTypes.bool,
   variant: PropTypes.string,
   onClick: PropTypes.func,
+  endIcon: PropTypes.node,
 };
 
 Button.defaultProps = {
@@ -36,6 +42,7 @@ Button.defaultProps = {
   fullWidth: true,
   variant: 'contained',
   onClick: () => {},
+  endIcon: null,
 };
 
 export default Button;

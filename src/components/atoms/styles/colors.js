@@ -5,6 +5,7 @@ const colors = {
   nav: '#2F304E',
   actionNav: '#F2945B',
   backgroundGeral: '#fff8f3',
+  error: '#F92F57',
 };
 
 export default colors;
