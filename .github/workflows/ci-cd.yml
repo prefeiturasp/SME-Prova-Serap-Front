@@ -6,9 +6,22 @@ on:
 
 jobs:
 
+  sonar-dev:
+    runs-on: node16
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Sonar Development
+        if: ${{ github.ref == 'refs/heads/development' }}
+        run: |
+               sonar-scanner \
+               -Dsonar.projectKey=SME-prova-serap-front \
+               -Dsonar.sources=. \
+               -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
+               -Dsonar.login=${{ secrets.SONAR_KEY }}
   build:
 
-    runs-on: sonar
+    runs-on: node16
 
     steps:
       - uses: actions/checkout@v2
