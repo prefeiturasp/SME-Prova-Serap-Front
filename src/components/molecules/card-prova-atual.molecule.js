@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
     boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.25)`,
     background: '#FFFFFF',
-    height: '220px',
+    miHeight: '220px',
     fontFamily: 'Poppins',
     display: 'flex',
     marginBottom: '15px',
