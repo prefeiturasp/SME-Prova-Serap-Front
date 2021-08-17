@@ -46,18 +46,49 @@ const useStyles = makeStyles({
 });
 
 const CardProvaAtual = (props) => {
-  const { itensQuantidade, dataInicio, descricao, onClickInicialProva } = props;
+  const {
+    itensQuantidade,
+    dataInicio,
+    dataFim,
+    descricao,
+    onClickInicialProva,
+  } = props;
   const classes = useStyles();
 
-  const montarDiaProva = (data) => {
-    const diaSemana = moment(data).format('ddd');
-    const dataHora = moment(data).format('L');
-    return (
+  const montarDiaProva = () => {
+    const dataInicioDiaSemana = moment(dataInicio).format('ddd');
+    const dataInicioDataHora = moment(dataInicio).format('L');
+
+    const inicio = (
       <strong>
-        <span style={{ textTransform: 'capitalize' }}>{` ${diaSemana}.`}</span>
-        {dataHora}
+        <span
+          style={{ textTransform: 'capitalize' }}
+        >{` ${dataInicioDiaSemana} - `}</span>
+        {dataInicioDataHora}
       </strong>
     );
+
+    if (dataFim) {
+      const dataFimDiaSemana = moment(dataFim).format('ddd');
+      const dataFimDataHora = moment(dataFim).format('L');
+
+      const fim = (
+        <>
+          <strong>
+            <span
+              style={{ textTransform: 'capitalize' }}
+            >{` ${dataFimDiaSemana} - `}</span>
+            {dataFimDataHora}
+          </strong>
+          <span style={{ fontWeight: 'normal' }}>{` à `}</span>
+          {inicio}
+        </>
+      );
+
+      return fim;
+    }
+
+    return inicio;
   };
 
   return (
@@ -78,12 +109,15 @@ const CardProvaAtual = (props) => {
             >{` ${itensQuantidade}`}</strong>
           </span>
         </div>
-        <div className={classes.infoProva}>
+        <div
+          className={classes.infoProva}
+          style={{ marginBottom: dataFim ? 3 : 20 }}
+        >
           <InsertInvitation htmlColor="#62C153" style={{ marginRight: 8 }} />
-          <span>
+          <span style={{ display: dataFim ? 'grid' : 'block' }}>
             Data de aplicação:
             <strong className={classes.valorInfos}>
-              {dataInicio ? montarDiaProva(dataInicio) : ''}
+              {dataInicio ? montarDiaProva(dataInicio, dataFim) : ''}
             </strong>
           </span>
         </div>
@@ -109,6 +143,7 @@ CardProvaAtual.propTypes = {
   descricao: PropTypes.string,
   itensQuantidade: PropTypes.number,
   dataInicio: PropTypes.string,
+  dataFim: PropTypes.string,
   onClickInicialProva: PropTypes.func,
 };
 
@@ -116,6 +151,7 @@ CardProvaAtual.defaultProps = {
   descricao: '',
   itensQuantidade: null,
   dataInicio: '',
+  dataFim: '',
   onClickInicialProva: () => {},
 };
 
