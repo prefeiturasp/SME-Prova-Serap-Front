@@ -55,6 +55,10 @@ const CardProvaAtual = (props) => {
   } = props;
   const classes = useStyles();
 
+  const inicioFimIgual = moment(dataInicio)
+    ?.startOf?.('day')
+    ?.isSame?.(moment?.(dataFim)?.startOf?.('day'));
+
   const montarDiaProva = () => {
     const dataInicioDiaSemana = moment(dataInicio).format('ddd');
     const dataInicioDataHora = moment(dataInicio).format('L');
@@ -68,24 +72,24 @@ const CardProvaAtual = (props) => {
       </strong>
     );
 
-    if (dataFim) {
+    if (dataFim && !inicioFimIgual) {
       const dataFimDiaSemana = moment(dataFim).format('ddd');
       const dataFimDataHora = moment(dataFim).format('L');
 
-      const fim = (
+      const inicioFim = (
         <>
+          {inicio}
+          <span style={{ fontWeight: 'normal' }}>{` à `}</span>
           <strong>
             <span
               style={{ textTransform: 'capitalize' }}
             >{` ${dataFimDiaSemana} - `}</span>
             {dataFimDataHora}
           </strong>
-          <span style={{ fontWeight: 'normal' }}>{` à `}</span>
-          {inicio}
         </>
       );
 
-      return fim;
+      return inicioFim;
     }
 
     return inicio;
@@ -111,10 +115,12 @@ const CardProvaAtual = (props) => {
         </div>
         <div
           className={classes.infoProva}
-          style={{ marginBottom: dataFim ? 3 : 20 }}
+          style={{ marginBottom: dataFim && !inicioFimIgual ? 3 : 20 }}
         >
           <InsertInvitation htmlColor="#62C153" style={{ marginRight: 8 }} />
-          <span style={{ display: dataFim ? 'grid' : 'block' }}>
+          <span
+            style={{ display: dataFim && !inicioFimIgual ? 'grid' : 'block' }}
+          >
             Data de aplicação:
             <strong className={classes.valorInfos}>
               {dataInicio ? montarDiaProva(dataInicio, dataFim) : ''}
