@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import shortid from 'shortid';
 import Tabs from '~/components/atoms/tabs/tabs.atom';
 import CardProvaAtual from '~/components/molecules/card-prova-atual.molecule';
 import { setDadosProvaIniciada } from '~/redux/modulos/provas/actions';
@@ -28,7 +29,11 @@ const AreaEstudante = () => {
       titulo: 'Prova atual',
       numeroTab: '1',
       componente: dados.map((prova) => (
-        <CardProvaAtual {...prova} onClickInicialProva={onClickInicialProva} />
+        <CardProvaAtual
+          key={shortid.generate()}
+          {...prova}
+          onClickInicialProva={onClickInicialProva}
+        />
       )),
     },
   ];

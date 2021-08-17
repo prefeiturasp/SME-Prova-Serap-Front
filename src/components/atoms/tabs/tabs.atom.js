@@ -5,6 +5,7 @@ import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import PropTypes from 'prop-types';
 import React from 'react';
+import shortid from 'shortid';
 import colors from '../styles/colors';
 
 const useStyles = makeStyles(() => ({
@@ -52,13 +53,21 @@ const TabsAtom = ({ dados, tabInicial }) => {
       <TabContext value={value}>
         <StyledTabs onChange={handleChange} aria-label="simple-tabs">
           {dados?.map((item) => (
-            <StyledTab label={item?.titulo} value={item?.numeroTab} />
+            <StyledTab
+              key={shortid.generate()}
+              label={item?.titulo}
+              value={item?.numeroTab}
+            />
           ))}
         </StyledTabs>
 
         {dados?.map((item) => (
-          <TabPanel className={classes.tabPanel} value={item?.numeroTab}>
-            {item?.componente}
+          <TabPanel
+            key={shortid.generate()}
+            className={classes.tabPanel}
+            value={item?.numeroTab}
+          >
+            {item?.componente ? item?.componente : 'Sem dados'}
           </TabPanel>
         ))}
       </TabContext>
