@@ -16,6 +16,12 @@ export default function provas(state = inicial, action) {
       case '@provas/setDadosProvaIniciada':
         draft.dadosProvaIniciada = action.payload;
         break;
+      case '@provas/setArquivos': {
+        const { provaId, dados } = action.payload;
+        const prova = draft.dadosProvas.find((p) => p.id === provaId);
+        prova.dadosArquivos = dados;
+        break;
+      }
       default:
         break;
     }

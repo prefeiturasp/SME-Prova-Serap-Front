@@ -9,6 +9,8 @@ import {
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { setArquivos } from '~/redux/modulos/provas/actions';
+import { arquivosService } from '~/services/arquivos/arquivos.service';
 import Button from '../atoms/button/button.component';
 import LogoProva from '../atoms/images/prova.svg';
 
@@ -43,6 +45,9 @@ const useStyles = makeStyles({
     color: '#4D4D4D',
     fontWeight: 700,
   },
+  botaoDownload: {
+    paddingTop: '12px',
+  },
 });
 
 const CardProvaAtual = (props) => {
@@ -52,6 +57,7 @@ const CardProvaAtual = (props) => {
     dataFim,
     descricao,
     onClickInicialProva,
+    id,
   } = props;
   const classes = useStyles();
 
@@ -140,12 +146,16 @@ const CardProvaAtual = (props) => {
             Iniciar a prova
           </Button>
         </div>
+        <div className={classes.botaoDownload}>
+          <Button onClick={() => obterArquivosId()}>Download</Button>
+        </div>
       </CardContent>
     </Card>
   );
 };
 
 CardProvaAtual.propTypes = {
+  id: PropTypes.number,
   descricao: PropTypes.string,
   itensQuantidade: PropTypes.number,
   dataInicio: PropTypes.string,
@@ -154,6 +164,7 @@ CardProvaAtual.propTypes = {
 };
 
 CardProvaAtual.defaultProps = {
+  id: 0,
   descricao: '',
   itensQuantidade: null,
   dataInicio: '',
