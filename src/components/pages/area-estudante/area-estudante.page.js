@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import Tabs from '~/components/atoms/tabs/tabs.atom';
 import CardProvaAtual from '~/components/molecules/card-prova-atual.molecule';
-import DownloadFile from '~/components/molecules/downlnoad-file';
 import { setDadosProvaIniciada } from '~/redux/modulos/provas/actions';
 import { URL_PROVA } from '~/route/url.constants';
 import history from '~/services/history';
@@ -50,9 +49,7 @@ const AreaEstudante = () => {
   return dadosProvas?.length ? (
     <Tabs dados={dadosTabs || []} tabInicial="1" />
   ) : (
-    <div>
-      <DownloadFile />
-    </div>
+    ''
   );
 };
 

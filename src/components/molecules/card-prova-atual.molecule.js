@@ -9,10 +9,9 @@ import {
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { setArquivos } from '~/redux/modulos/provas/actions';
-import { arquivosService } from '~/services/arquivos/arquivos.service';
 import Button from '../atoms/button/button.component';
 import LogoProva from '../atoms/images/prova.svg';
+import DownloadFile from './download-file';
 
 const useStyles = makeStyles({
   root: {
@@ -147,7 +146,7 @@ const CardProvaAtual = (props) => {
           </Button>
         </div>
         <div className={classes.botaoDownload}>
-          <Button onClick={() => obterArquivosId()}>Download</Button>
+          <DownloadFile provaId={id} index={0} />
         </div>
       </CardContent>
     </Card>

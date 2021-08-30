@@ -6,7 +6,7 @@ export default (reducers) => {
     {
       key: 'sme-serap',
       storage,
-      whitelist: ['usuario'],
+      whitelist: ['usuario', 'provas'],
     },
     reducers,
   );
