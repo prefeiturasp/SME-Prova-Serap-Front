@@ -63,17 +63,6 @@ const DownloadFile = (props) => {
               api
                 .get(resp.data.caminho, { responseType: 'blob', ...options })
                 .then((responseDownload) => {
-                  const url = window.URL.createObjectURL(
-                    new Blob([responseDownload.data], {
-                      type: responseDownload.headers['content-type'],
-                    }),
-                  );
-
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.setAttribute('download', resp.data.nome);
-                  document.body.appendChild(link);
-                  link.click();
                   dispatch(
                     setDownloadCompleto(
                       provaId,
