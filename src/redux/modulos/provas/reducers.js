@@ -19,26 +19,28 @@ export default function provas(state = inicial, action) {
       case '@provas/setArquivos': {
         const { provaId, dados } = action.payload;
         const prova = draft.dadosProvas.find((p) => p.id === provaId);
-        prova.dadosArquivos = dados;
+        prova.arquivos = dados;
+        prova.quantidadeArquivos = dados.length;
+        prova.iniciarDownload = true;
         break;
       }
       case '@provas/setDownloadCompleto': {
         const { provaId, arquivoId, completo, arquivo } = action.payload;
         const prova = draft.dadosProvas.find((p) => p.id === provaId);
-        const arquivoAlterar = prova.dadosArquivos.arquivos.find(
-          (a) => a.id === arquivoId,
-        );
-        if (arquivo) {
+        const arquivoAlterar = prova.arquivos.find((a) => a.id === arquivoId);
+        if (arquivoAlterar && completo) {
           arquivoAlterar.downloadCompleto = completo;
           arquivoAlterar.arquivo = arquivo;
-          prova.totalBaixados += 1;
+          prova.totalBaixados = prova.totalBaixados
+            ? prova.totalBaixados + 1
+            : 1;
         }
         break;
       }
-      case '@provas/iniciarDownload': {
+      case '@provas/setIniciarDownload': {
         const { provaId, iniciar } = action.payload;
         const prova = draft.dadosProvas.find((p) => p.id === provaId);
-        prova.dadosArquivos.iniciarDownload = iniciar;
+        prova.iniciarDownload = iniciar;
         break;
       }
 
@@ -53,13 +55,6 @@ export default function provas(state = inicial, action) {
         const { provaId, numeroArquivo } = action.payload;
         const prova = draft.dadosProvas.find((p) => p.id === provaId);
         prova.numeroArquivoAtual = numeroArquivo;
-        break;
-      }
-
-      case '@provas/setTotalArquivos': {
-        const { provaId, total } = action.payload;
-        const prova = draft.dadosProvas.find((p) => p.id === provaId);
-        prova.quantidadeArquivos = total;
         break;
       }
 

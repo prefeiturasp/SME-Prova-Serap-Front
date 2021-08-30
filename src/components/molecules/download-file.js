@@ -4,12 +4,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  iniciarDownload,
   setArquivos,
   setDownloadCompleto,
+  setIniciarDownload,
   setNumeroArquivoAtual,
   setProgressoDownload,
-  setTotalArquivos,
 } from '~/redux/modulos/provas/actions';
 import api from '~/services/api';
 import { arquivosService } from '~/services/arquivos/arquivos.service';
@@ -23,8 +22,8 @@ const DownloadStyled = styled(LinearProgress)({
 const DownloadFile = (props) => {
   const { provaId, index } = props;
   const dispatch = useDispatch();
-  const dadosArquivos = useSelector(
-    (state) => state.provas?.dadosProvas[index]?.dadosArquivos,
+  const arquivos = useSelector(
+    (state) => state.provas?.dadosProvas[index]?.arquivos,
   );
 
   const progressoDownload = useSelector(
@@ -39,9 +38,13 @@ const DownloadFile = (props) => {
     (state) => state.provas?.dadosProvas[index]?.quantidadeArquivos,
   );
 
+  const iniciarDownload = useSelector(
+    (state) => state.provas?.dadosProvas[index]?.iniciarDownload,
+  );
+
   useEffect(() => {
-    if (dadosArquivos?.iniciarDownload) {
-      dadosArquivos.arquivos.forEach((arquivo, indexArquivo) => {
+    if (iniciarDownload && arquivos) {
+      arquivos.forEach((arquivo, indexArquivo) => {
         if (!arquivo.downloadCompleto) {
           dispatch(setNumeroArquivoAtual(provaId, indexArquivo + 1));
           arquivosService.obterArquivo(arquivo.id).then((resp) => {
@@ -90,22 +93,18 @@ const DownloadFile = (props) => {
           });
         }
       });
-      dispatch(iniciarDownload(provaId, false));
+      dispatch(setIniciarDownload(provaId, false));
     }
-  }, [dadosArquivos, provaId, dispatch]);
+  }, [arquivos, provaId, dispatch, iniciarDownload]);
 
   const obterArquivosId = () => {
     arquivosService.obterArquivosIdProva(provaId).then((resp) => {
       if (resp?.data?.length) {
         const idsArquivos = resp.data;
-        const dadosArquivo = {
-          iniciarDownload: true,
-          arquivos: idsArquivos.map((arquivoId) => ({
-            id: arquivoId,
-          })),
-        };
+        const dadosArquivo = idsArquivos.map((arquivoId) => ({
+          id: arquivoId,
+        }));
         dispatch(setArquivos(provaId, dadosArquivo));
-        dispatch(setTotalArquivos(provaId, resp.data.length));
       }
     });
   };

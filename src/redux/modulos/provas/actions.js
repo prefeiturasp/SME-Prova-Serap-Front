@@ -14,12 +14,12 @@ export const setArquivos = (provaId, dados) => ({
 });
 
 export const setDownloadCompleto = (provaId, arquivoId, completo, arquivo) => ({
-  type: '@provas/setArquivos',
+  type: '@provas/setDownloadCompleto',
   payload: { provaId, arquivoId, completo, arquivo },
 });
 
-export const iniciarDownload = (provaId, iniciar) => ({
-  type: '@provas/iniciarDownload',
+export const setIniciarDownload = (provaId, iniciar) => ({
+  type: '@provas/setIniciarDownload',
   payload: { provaId, iniciar },
 });
 
@@ -31,9 +31,4 @@ export const setProgressoDownload = (provaId, progresso) => ({
 export const setNumeroArquivoAtual = (provaId, numeroArquivo) => ({
   type: '@provas/setNumeroArquivoAtual',
   payload: { provaId, numeroArquivo },
-});
-
-export const setTotalArquivos = (provaId, total) => ({
-  type: '@provas/setTotalArquivos',
-  payload: { provaId, total },
 });
