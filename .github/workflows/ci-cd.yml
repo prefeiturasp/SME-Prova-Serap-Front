@@ -4,6 +4,9 @@ on:
   push:
     branches: [ development, release ]
 
+  
+  workflow_dispatch:
+
 jobs:
 
   sonar-dev:
